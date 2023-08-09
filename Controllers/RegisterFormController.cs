@@ -30,13 +30,21 @@ namespace EmailForm.Controllers
                 _logger.LogWarning("Failed to post data");
                 return CurrentUmbracoPage();
             }
+
             _logger.LogInformation("Posting data");
+
             bool emailStat = PostEmail(model);
+
             if (emailStat)
             {
+                TempData["FailedStatus"] = null;
                 TempData["SendMail"] = true;
             }
-            TempData["FailedStatus"] = "Email failed to be sent, as SMTP connection failed";
+            else
+            {
+                TempData["FailedStatus"] = "Email failed to be sent, as SMTP connection failed";
+            }
+
             return RedirectToCurrentUmbracoPage();
         }
 
