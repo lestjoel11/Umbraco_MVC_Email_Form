@@ -1,0 +1,16 @@
+﻿@using EmailForm.Models;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    Layout = "Master.cshtml";
+}
+<div class="container">
+    @if (TempData["ContactSuccess"] != null && (bool)TempData["ContactSuccess"])
+    {
+        <h1 class="display-3">Message sent successfully</h1>
+        <a href="/" class="btn btn-primary">Back to Home</a>
+    }
+    else
+    {
+        await Html.RenderPartialAsync("~/Views/Partials/RegisterForm/_RegisterForm.cshtml", new RegisterFormModel());
+    }
+</div>
