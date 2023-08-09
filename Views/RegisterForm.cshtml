@@ -4,7 +4,7 @@
     Layout = "Master.cshtml";
 }
 <div class="container">
-    @if (TempData["ContactSuccess"] != null && (bool)TempData["ContactSuccess"])
+    @if (TempData["SendMail"] != null && (bool)TempData["SendMail"])
     {
         <h1 class="display-3">Message sent successfully</h1>
         <a href="/" class="btn btn-primary">Back to Home</a>
@@ -13,4 +13,8 @@
     {
         await Html.RenderPartialAsync("~/Views/Partials/RegisterForm/_RegisterForm.cshtml", new RegisterFormModel());
     }
+    @if (TempData["FailedStatus"] != null)
+    {
+        <h1 class="display-5">@TempData["FailedStatus"]</h1>
+    } 
 </div>

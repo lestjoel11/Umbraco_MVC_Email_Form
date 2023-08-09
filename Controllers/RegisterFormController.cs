@@ -31,12 +31,16 @@ namespace EmailForm.Controllers
                 return CurrentUmbracoPage();
             }
             _logger.LogInformation("Posting data");
-            PostEmail(model);
-            TempData["ContactSuccess"] = true;
+            bool emailStat = PostEmail(model);
+            if (emailStat)
+            {
+                TempData["SendMail"] = true;
+            }
+            TempData["FailedStatus"] = "Email failed to be sent, as SMTP connection failed";
             return RedirectToCurrentUmbracoPage();
         }
 
-        private static void PostEmail(RegisterFormModel model)
+        private static bool PostEmail(RegisterFormModel model)
         {
             MailMessage mailMessage = new("admin@example.com", model.EmailAddress)
             {
@@ -44,7 +48,15 @@ namespace EmailForm.Controllers
                 Body = string.Format("{0} {1} have successfuly been registered with the email {2}", model.FirstName, model.LastName, model.EmailAddress)
             };
             SmtpClient client = new("127.0.0.1", 25);
-            client.Send(mailMessage);
+            try
+            {
+                client.Send(mailMessage);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }
